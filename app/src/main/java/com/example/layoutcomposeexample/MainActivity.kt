@@ -33,8 +33,6 @@ class MainActivity : ComponentActivity() {
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
-                    ColumnExample()
-                    RowExample()
                 }
             }
         }
@@ -47,32 +45,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
-}
-
-@Composable
-fun ColumnExample() {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 100.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.SpaceAround,
-    ) {
-        Text("Primer Elemento")
-        Text("Segundo Elemento")
-        Text("Tercer Elemento")
-    }
-}
-
-@Composable
-fun RowExample() {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(start = 100.dp, top = 200.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Button(onClick = { /* ... */ }) { Text("Botón 1") }
-        Spacer(Modifier.width(8.dp))
-        Button(onClick = { /* ... */ }) { Text("Botón 2") }
-    }
 }
 
 @Preview(showBackground = true)
