@@ -1,5 +1,6 @@
 package com.example.layoutcomposeexample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,6 +45,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.layoutcomposeexample.ui.theme.LayoutComposeExampleTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 
 class MainActivity : ComponentActivity() {
@@ -57,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
-                    MaterialDesignComponentsExample()
+
                 }
             }
         }
@@ -72,72 +79,33 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MaterialDesignComponentsExample() {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Mi App Compose")})
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(Icons.Filled.Add, contentDescription = "Añadir")
-            }
-        },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
-            ) {
-                Text(text = "Componentes de Material Design", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(horizontal = 16.dp))
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                ) {
-                    Column(modifier = Modifier.padding(16.dp),
-                    ) {
-                        Text("Tarjeta de Ejemplo", style = MaterialTheme.typography.titleLarge)
-                        Text("Este es un contenido dentro de la Card.")
-                    }
-                }
-                ListAndScrollExample()
-            }
-        }
-    )
+fun MyGoogleMaps(){
+    GoogleMap(modifier = Modifier.fillMaxSize())
 }
 
-
-
-
-
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun ListAndScrollExample() {
-    val dataItems = List(50) { "Elemento de Lista $it" }
+fun MapScreen() {
+    // 1. Definir una ubicación (ejemplo: Sídney)
+    val sydney = LatLng(-33.852334, 151.210608)
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(dataItems) { item ->
-            ListItemRow(text = item)
-        }
+    // 2. Crear y recordar el estado de la posición de la cámara
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(sydney, 10f) // LatLng y nivel de zoom inicial
     }
-}
 
-@Composable
-fun ListItemRow(text: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    // 3. Usar el Composable GoogleMap
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(), // Para que ocupe todo el espacio
+        cameraPositionState = cameraPositionState
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = text, style = MaterialTheme.typography.bodyLarge)
-        }
+        // Opcional: Agregar un marcador
+        Marker(
+            state = MarkerState(position = sydney),
+            title = "Sídney",
+            snippet = "Marker en Sídney"
+        )
     }
 }
 
@@ -145,5 +113,7 @@ fun ListItemRow(text: String) {
 @Composable
 fun GreetingPreview() {
     LayoutComposeExampleTheme {
+        Greeting("Android")
+
     }
 }
