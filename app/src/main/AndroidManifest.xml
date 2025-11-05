@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LayoutComposeExample" >
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="API_KEY_HERE" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="API"/>-->
 
         <activity
             android:name=".MainActivity"

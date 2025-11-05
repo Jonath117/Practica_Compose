@@ -55,10 +55,12 @@ dependencies {
 
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.material:material-icons-core")
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.compose.ui.geometry)
 
-    //Maps
-    implementation("com.google.maps.android:maps-compose:6.12.1")
-    implementation("com.google.android.gms:play-services-maps:19.2.0")
+
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
