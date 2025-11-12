@@ -12,22 +12,40 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 @Composable
-fun BottomBar(){
+fun BottomBar(navController: NavController){
     NavigationBar {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Home, contentDescription = "Inicio") },
             label = {Text("Inicio")},
             selected = true,
-            onClick = { /*accion*/}
+            onClick = {
+                navController.navigate("home") {
+                    popUpTo(navController.graph.findStartDestination().id){
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         )
 
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Settings, contentDescription = "Configuración") },
             label = {Text("Configuracion")},
             selected = false,
-            onClick = { /*accion*/}
+            onClick = {
+                navController.navigate("settings") {
+                    popUpTo(navController.graph.findStartDestination().id){
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         )
     }
 }

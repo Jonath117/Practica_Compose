@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.layoutcomposeexample.ui.theme.LayoutComposeExampleTheme
 import com.example.layoutcomposeexample.ui.weather.screen.WeatherScreen
-
+import com.example.layoutcomposeexample.ui.AppNavigation
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LayoutComposeExampleTheme {
                 Scaffold( modifier = Modifier.fillMaxSize() ) {
-                    WeatherScreen()
+                    AppNavigation()
                 }
             }
         }

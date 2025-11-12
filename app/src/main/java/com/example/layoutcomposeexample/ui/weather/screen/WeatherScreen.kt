@@ -10,18 +10,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.example.layoutcomposeexample.R
 import com.example.layoutcomposeexample.ui.weather.component.BottomBar
 import com.example.layoutcomposeexample.ui.weather.component.TodayWeatherDisplay
 
 // Este será el Composable principal que usará el ViewModel (cuando lo tengas)
 @Composable
-fun WeatherScreen(modifier: Modifier = Modifier) {
+fun WeatherScreen(navController: NavController, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
 
     Scaffold (
         bottomBar = {
-            BottomBar()
+            BottomBar(navController = navController)
         }
     ){ paddingValues ->
         Column(
@@ -46,6 +47,6 @@ fun WeatherScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 fun WeatherScreenPreview() {
     com.example.layoutcomposeexample.ui.theme.LayoutComposeExampleTheme {
-        WeatherScreen()
+        //WeatherScreen()
     }
 }

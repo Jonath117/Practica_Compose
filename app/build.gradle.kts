@@ -57,6 +57,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core")
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.compose.ui.geometry)
+    implementation(libs.androidx.navigation.compose)
 
 
 
