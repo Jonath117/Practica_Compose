@@ -32,6 +32,7 @@ fun CarruselSimple(){
                 )
             ){
                 Text(text = "Card $index")
+
             }
         }
     }

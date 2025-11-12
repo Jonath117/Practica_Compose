@@ -30,7 +30,7 @@ fun TodayWeatherDisplay(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 48.dp)
+
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
