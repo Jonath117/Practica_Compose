@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import com.example.layoutcomposeexample.ui.weather.component.SettingsTopBar
 import android.Manifest
 import android.content.Context
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
 import com.example.layoutcomposeexample.utils.isNetworkAvailable
 
 @Composable
@@ -81,7 +83,11 @@ fun SettingsScreen(navController: NavController){
                             )
                         }
                     }
-                }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Gray,
+                    contentColor = Color.White
+                )
             ) {
                 Text("Solicitar Permiso de Ubicación")
             }
@@ -95,7 +101,11 @@ fun SettingsScreen(navController: NavController){
                         }else{
                             networkStatusText = "Sin conexión de red."
                         }
-                    }
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Gray,
+                    contentColor = Color.White
+                )
             ) {
                 Text("Verificar Conexión de Red")
             }
