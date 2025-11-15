@@ -4,13 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,32 +14,41 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.layoutcomposeexample.ui.theme.LayoutComposeExampleTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
+
+class NotificationViewModel : ViewModel() {
+    private val _notificationsEnabled = MutableStateFlow(true)
+
+    val notificationsEnabled: StateFlow<Boolean> = _notificationsEnabled.asStateFlow()
+
+    fun toggleNotifications() {
+        _notificationsEnabled.value = !_notificationsEnabled.value
+    }
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,97 +57,74 @@ class MainActivity : ComponentActivity() {
         setContent {
             LayoutComposeExampleTheme {
                 Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    MaterialDesignComponentsExample()
+                    NotificationSettingsScreen(Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
+fun NotificationSettingsScreen(modifier: Modifier = Modifier, viewModel: NotificationViewModel = viewModel()) {
+
+    val notificationsEnabled by viewModel.notificationsEnabled.collectAsState()
+
+    Column(
         modifier = modifier
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MaterialDesignComponentsExample() {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Mi App Compose")})
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(Icons.Filled.Add, contentDescription = "Añadir")
-            }
-        },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
-            ) {
-                Text(text = "Componentes de Material Design", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(horizontal = 16.dp))
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                ) {
-                    Column(modifier = Modifier.padding(16.dp),
-                    ) {
-                        Text("Tarjeta de Ejemplo", style = MaterialTheme.typography.titleLarge)
-                        Text("Este es un contenido dentro de la Card.")
-                    }
-                }
-                ListAndScrollExample()
-            }
-        }
-    )
-}
-
-
-
-
-
-@Composable
-fun ListAndScrollExample() {
-    val dataItems = List(50) { "Elemento de Lista $it" }
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.Start
     ) {
-        items(dataItems) { item ->
-            ListItemRow(text = item)
-        }
-    }
-}
+        Text(
+            text = "Configuración de Notificaciones",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(24.dp))
 
-@Composable
-fun ListItemRow(text: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-    ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = text, style = MaterialTheme.typography.bodyLarge)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if (notificationsEnabled) Icons.Default.Notifications else Icons.Default.NotificationsOff,
+                    contentDescription = "Estado de notificación",
+                    tint = if (notificationsEnabled) MaterialTheme.colorScheme.primary else Color.Gray,
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(
+                        text = "Recibir Alertas",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = if (notificationsEnabled) "Notificaciones activas" else "Notificaciones silenciadas",
+                        color = if (notificationsEnabled) Color(0xFF00C853) else Color.Red, // Verde o Rojo
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+            Switch(
+                checked = notificationsEnabled,
+                onCheckedChange = {
+                    viewModel.toggleNotifications()
+                }
+            )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun NotificationSettingsPreview() {
     LayoutComposeExampleTheme {
+        NotificationSettingsScreen()
     }
 }
